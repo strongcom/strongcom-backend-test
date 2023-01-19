@@ -9,7 +9,7 @@ const ReminderSchema = new Schema({
     content: String,
     startDate: Date,
     endDate: Date,
-    RepetitionId: Number,
+    RepetitionId: String,
     RepetitionPeriod: String,
     RepetitionDay: String,
 });

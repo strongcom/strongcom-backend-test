@@ -7,7 +7,7 @@ import 'dotenv/config';
 
 
 mongoose.connect(process.env.MONGO_URI, {
-    dbName: 'reminder',
+    dbName: 'strongcom',
 })
     .then(() => {
         console.log('Connecting to MongoDB');
