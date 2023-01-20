@@ -16,6 +16,7 @@ export const postReminder = async ctx => {
     const reminderRepetitionList = new ProcessingPostDto(reminderPostDto).getReminderRepetitionList();
     const reminderList = reminderRepetitionList.map((reminder)=>new Reminder(reminder));
     try {
+        console.log('reminder post result\n',reminderList)
         for (const reminder of reminderList) {
             await reminder.save();
         }

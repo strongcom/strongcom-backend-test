@@ -2,6 +2,16 @@
 import {v4 as uuid} from "uuid";
 import dayjs from "dayjs";
 
+const dayOfWeek = {
+    Sun: 0,
+    Mon: 1,
+    Tue: 2,
+    Wed: 3,
+    Thu: 4,
+    Fri: 5,
+    Sat: 6,
+}
+
 export class ProcessingPostDto {
     repetitionCount = 10;
     reminderPostDto;
@@ -12,52 +22,70 @@ export class ProcessingPostDto {
 
     constructor(reminderPostDto) {
         this.reminderPostDto = reminderPostDto;
-        this.startDate = dayjs(reminderPostDto.startDate);
-        this.endDate = dayjs(reminderPostDto.endDate);
-        this.repetitionCount = this.calculateRepetitionCount(reminderPostDto.endDate, reminderPostDto.RepetitionPeriod);
+        this.startDate = dayjs(reminderPostDto.startDate).add(9,'h');
+        this.endDate = dayjs(reminderPostDto.endDate).add(9,'h');
+    }
+
+    calculateRepetitionCount() {
+        this.repetitionCount = this.reminderPostDto.endDate
+            ? this.endDate.diff(this.startDate, this.reminderPostDto.RepetitionPeriod)+ 1
+            : 10
     }
 
     dtoToEntity() {
         this.reminderEntity = {
             ...this.reminderPostDto,
-            startDate: null,
-            endDate: null,
+            startDate: this.startDate,
+            endDate: dayjs(`${this.startDate.format()}`)
+                        .set('h',this.endDate.get('h'))
+                        .set('m',this.endDate.get('m')),
             RepetitionId: uuid(),
         }
     }
 
-    /*
-        반복해야함. 근데 몇번?
-        endDate가 있다면 start부터 end까지 몇번인지 정보를 Period code를 통해 유추해야하는데,
-        근데 요일 선택 반복인 경우에는 요일까지 고려해야함....
-        endDate가 있는가?
-            Period code는 무엇인가?
-                만약 Weekly라면?
-                    Weekly string을 split
-     */
-    calculateRepetitionCount(endDate, RepetitionPeriod) {
-        return endDate
-            ? this.endDate.diff(this.startDate, RepetitionPeriod)
-            : 10
+    EntityToList() {
+        this.reminderList = Array(this.repetitionCount).fill(this.reminderEntity)
+            .map((reminder, cnt) => {
+                return {
+                    ...reminder,
+                    startDate: this.startDate.add(cnt, this.reminderEntity.RepetitionPeriod).format(),
+                    endDate: reminder.endDate.add(cnt, this.reminderEntity.RepetitionPeriod).format()
+                }
+            }
+        );
     }
 
-    EntityToList() {
-        const periodCodeToList = {
-            d: function () {
-                Array(this.repetitionCount).fill(this.reminderEntity).map((reminder, cnt) =>
-                    ({...reminder, startDate: this.startDate.add(cnt, 'd').format()})
-                )
-            },
-        }
-        this.reminderList = Array(this.repetitionCount).fill(this.reminderEntity).map((reminder, cnt) =>
-            ({...reminder, startDate: this.startDate.add(cnt, 'd').format()})
-        )
+    calculateWeeklyRepetition(){
+        let dayArr = this.reminderPostDto.RepetitionDay.split(' ')
+            .map(v=>dayOfWeek[v]-this.startDate.get('day') < 0 ? dayOfWeek[v]-this.startDate.get('day') + 7: dayOfWeek[v]-this.startDate.get('day'))
+            .sort((a, b) =>a-b)
+
+        this.repetitionCount = this.reminderPostDto.endDate
+            ? Math.floor(this.endDate.diff(this.startDate, 'd')/7)*dayArr.length + this.reminderPostDto.RepetitionDay.split(' ').filter
+            : 10
+
+        let dayCnt = new Array(10).fill(0)
+            .map((_,i)=>7*Math.floor((i)/dayArr.length) + dayArr[i%dayArr.length])
+
+        this.reminderList = Array(10).fill(this.reminderEntity)
+            .map((reminder, index)=>{
+                return{
+                    ...reminder,
+                    startDate: this.startDate.add(dayCnt[index], this.reminderEntity.RepetitionPeriod).format(),
+                    endDate: this.endDate.add(dayCnt[index], this.reminderEntity.RepetitionPeriod).format()
+                }
+            })
     }
 
     getReminderRepetitionList() {
         this.dtoToEntity();
-        this.EntityToList();
-        console.log(this.reminderList)
+        if(this.reminderPostDto.RepetitionPeriod === 'w'){
+            this.calculateWeeklyRepetition();
+            console.log(this.reminderList)
+        }else{
+            this.calculateRepetitionCount();
+            this.EntityToList();
+        }
         return this.reminderList;
     }
 }
