@@ -72,7 +72,7 @@ export class ProcessingPostDto {
                 return{
                     ...reminder,
                     startDate: this.startDate.add(dayCnt[index], this.reminderEntity.RepetitionPeriod).format(),
-                    endDate: this.endDate.add(dayCnt[index], this.reminderEntity.RepetitionPeriod).format()
+                    endDate: reminder.endDate.add(dayCnt[index], this.reminderEntity.RepetitionPeriod).format()
                 }
             })
     }
