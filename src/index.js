@@ -1,4 +1,5 @@
 import Koa from 'koa';
+import cors from '@koa/cors';
 import Router from 'koa-router';
 import bodyParser from 'koa-bodyparser';
 import mongoose from 'mongoose';
@@ -16,6 +17,15 @@ mongoose.connect(process.env.MONGO_URI, {
 
 const app = new Koa();
 const router = new Router();
+
+let corsOptions = {
+    origin: process.env.CLIENT_HOST,
+    credentials: true,
+}
+
+// CORS 허용
+app.proxy = true; // true 일때 proxy 헤더들을 신뢰함
+app.use(cors(corsOptions));
 
 router.use('/api', api.routes());
 
