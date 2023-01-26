@@ -1,11 +1,6 @@
 import dayjs from "dayjs";
-
-const date = dayjs('2023-01-03 18:00:00');
-const date2 = dayjs('2023-01-17 18:00:00');
-// console.log(date.set('day',12).get('day'))
-// console.log(date.get('day'))
-
-// const date = dayjs(null) ;
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore.js";
+dayjs.extend(isSameOrBefore)
 
 const dayOfWeek = {
     Sun: 0,
@@ -17,18 +12,34 @@ const dayOfWeek = {
     Sat: 6,
 }
 
-
 let dayArr = 'Mon Wed Fri'.split(' ')
-    .map(v=>dayOfWeek[v]-date.get('day') < 0 ? dayOfWeek[v]-date.get('day') + 7: dayOfWeek[v]-date.get('day'))
-    .sort((a, b) =>a-b)
+    .map(v=>dayOfWeek[v])
 
-let cnt = Math.floor(date2.diff(date,'d') / 7)*dayArr.length
-    + (date2.day() === date.day() &&  'Mon Wed Fri'.split(' ').includes(date.day()) ? 1 : 0)
-    + date.day() + date2.diff(date,'d') % 7
+let startDate = dayjs('2023-01-03')
+let endDate = dayjs('2023-01-17')
+let date = dayjs(startDate);
 
-let dayCnt = new Array(10).fill(0)
-    .map((_,i)=>7*Math.floor((i)/dayArr.length) + dayArr[i%dayArr.length])
+let arr = []
+let i = 0;
 
-console.log(dayArr)
-console.log(dayCnt)
-console.log(date.day())
+for (let i = 0; ; i++){
+    let day = dayArr[i%dayArr.length] + (7 * Math.floor(i/dayArr.length))
+    date = startDate.set('day',dayArr[i%dayArr.length] + (7 * Math.floor(i/dayArr.length)))
+    if(!date.isSameOrBefore(endDate)){
+        break;
+    }
+    if(day > startDate.day()){
+        arr.push(date.format())
+    }
+}
+
+// while(date.isSameOrBefore(endDate)){
+//     let day = dayArr[i%dayArr.length] + (7 * Math.floor(i/dayArr.length))
+//     date = startDate.set('day',dayArr[i%dayArr.length] + (7 * Math.floor(i/dayArr.length)))
+//     if(day > startDate.day() && date.isSameOrBefore(endDate)){
+//         arr.push(date.format())
+//     }
+//     i++;
+// }
+
+console.log(arr)

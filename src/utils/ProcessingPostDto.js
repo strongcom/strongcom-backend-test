@@ -1,4 +1,6 @@
-//     
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore.js";
+dayjs.extend(isSameOrBefore)
+
 import {v4 as uuid} from "uuid";
 import dayjs from "dayjs";
 
@@ -55,32 +57,39 @@ export class ProcessingPostDto {
         );
     }
 
-    calculateWeeklyRepetition(){
-        let dayArr = this.reminderPostDto.RepetitionDay.split(' ')
-            .map(v=>dayOfWeek[v]-this.startDate.get('day') < 0 ? dayOfWeek[v]-this.startDate.get('day') + 7: dayOfWeek[v]-this.startDate.get('day'))
-            .sort((a, b) =>a-b)
+    weeklyEntityToList(){
+        let dayArr = 'Mon Wed Fri'.split(' ')
+            .map(v=>dayOfWeek[v])
 
-        this.repetitionCount = this.reminderPostDto.endDate
-            ? Math.floor(this.endDate.diff(this.startDate, 'd')/7)*dayArr.length + this.reminderPostDto.RepetitionDay.split(' ').filter
-            : 10
+        let dateArr = [];
+        let date = dayjs(this.startDate)
+        for (let i = 0; ; i++){
+            let day = dayArr[i%dayArr.length] + (7 * Math.floor(i/dayArr.length))
+            date = this.startDate.set('day',dayArr[i%dayArr.length] + (7 * Math.floor(i/dayArr.length)))
+            if(!date.isSameOrBefore(this.endDate)){
+                break;
+            }
+            if(day > this.startDate.day()){
+                dateArr.push(date)
+            }
+        }
 
-        let dayCnt = new Array(10).fill(0)
-            .map((_,i)=>7*Math.floor((i)/dayArr.length) + dayArr[i%dayArr.length])
-
-        this.reminderList = Array(10).fill(this.reminderEntity)
-            .map((reminder, index)=>{
-                return{
-                    ...reminder,
-                    startDate: this.startDate.add(dayCnt[index], this.reminderEntity.RepetitionPeriod).format(),
-                    endDate: reminder.endDate.add(dayCnt[index], this.reminderEntity.RepetitionPeriod).format()
+        this.reminderList = Array(dateArr.length).fill(this.reminderEntity)
+            .map((reminder, index) => {
+                    return {
+                        ...reminder,
+                        startDate: dateArr[index],
+                        endDate: dateArr[index].set('h',this.endDate.get('h')).set('m',this.endDate.get('m'))
+                    }
                 }
-            })
+            );
+
     }
 
     getReminderRepetitionList() {
         this.dtoToEntity();
         if(this.reminderPostDto.RepetitionPeriod === 'w'){
-            this.calculateWeeklyRepetition();
+            this.weeklyEntityToList();
             console.log(this.reminderList)
         }else{
             this.calculateRepetitionCount();
