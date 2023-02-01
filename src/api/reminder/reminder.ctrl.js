@@ -1,11 +1,13 @@
-//     
+//
 import Reminder from '../../models/schema/reminder.js';
-                                                                         
+
 import {ProcessingPostDto} from "../../utils/ProcessingPostDto.js";
+import dayjs from "dayjs";
 
 export const getReminderList = async ctx => {
     try {
-        ctx.body = await Reminder.find().exec();
+        let reminderList = await Reminder.find().exec();
+        ctx.body = reminderList.filter(v=>dayjs(v.startDate).add(-9,'hour').isSame(dayjs(),'day'));
     } catch (e) {
         ctx.throw(500, e)
     }
