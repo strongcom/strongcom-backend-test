@@ -11,35 +11,6 @@ const dayOfWeek = {
     Fri: 5,
     Sat: 6,
 }
+const date = dayjs();
 
-let dayArr = 'Mon Wed Fri'.split(' ')
-    .map(v=>dayOfWeek[v])
-
-let startDate = dayjs('2023-01-03')
-let endDate = dayjs('2023-01-17')
-let date = dayjs(startDate);
-
-let arr = []
-let i = 0;
-
-for (let i = 0; ; i++){
-    let day = dayArr[i%dayArr.length] + (7 * Math.floor(i/dayArr.length))
-    date = startDate.set('day',dayArr[i%dayArr.length] + (7 * Math.floor(i/dayArr.length)))
-    if(!date.isSameOrBefore(endDate)){
-        break;
-    }
-    if(day > startDate.day()){
-        arr.push(date.format())
-    }
-}
-
-// while(date.isSameOrBefore(endDate)){
-//     let day = dayArr[i%dayArr.length] + (7 * Math.floor(i/dayArr.length))
-//     date = startDate.set('day',dayArr[i%dayArr.length] + (7 * Math.floor(i/dayArr.length)))
-//     if(day > startDate.day() && date.isSameOrBefore(endDate)){
-//         arr.push(date.format())
-//     }
-//     i++;
-// }
-
-console.log(arr)
+console.log(date.add( 1,'week').format());

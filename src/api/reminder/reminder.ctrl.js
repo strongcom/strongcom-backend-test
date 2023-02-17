@@ -1,7 +1,7 @@
 //
 import Reminder from '../../models/schema/reminder.js';
-import {ProcessingPostDto} from "../../utils/ProcessingPostDto.js";
 import dayjs from "dayjs";
+import reminderController from "../../controller/reminderController.js";
 
 export const getReminderList = async ctx => {
     try {
@@ -20,15 +20,13 @@ export const getReminderList = async ctx => {
 }
 
 export const postReminder = async ctx => {
-    const reminderPostDto = ctx.request.body;
-    const reminderRepetitionList = new ProcessingPostDto(reminderPostDto).getReminderRepetitionList();
-    const reminderList = reminderRepetitionList.map((reminder) => new Reminder(reminder));
+    const reminderEntity = reminderController().main({...ctx.request.body});
+    const reminder = new Reminder(reminderEntity);
+
     try {
-        console.log('reminder post result\n', reminderList)
-        for (const reminder of reminderList) {
-            await reminder.save();
-        }
-        ctx.body = reminderList;
+        console.log('reminder post result\n', reminder)
+        await reminder.save();
+        ctx.body = reminder;
     } catch (e) {
         ctx.throw(500, e);
     }
