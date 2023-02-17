@@ -13,7 +13,7 @@ const ReminderSchema = new Schema({
     endTime: String,
     repetitionPeriod: String,
     repetitionDay: String,
-    notices: [{noticeDate: String, startTime: String, endTime: String }],
+    notices: [String],
 });
 
 const Reminder = mongoose.model('Reminder', ReminderSchema);
