@@ -5,13 +5,15 @@ const {Schema} = mongoose;
 const ReminderSchema = new Schema({
     userId: String,
     title: String,
-    subtitle: String,
+    subTitle: String,
     content: String,
-    startDate: Date,
-    endDate: Date,
-    RepetitionId: String,
-    RepetitionPeriod: String,
-    RepetitionDay: String,
+    startDate: String,
+    endDate: String,
+    startTime: String,
+    endTime: String,
+    repetitionPeriod: String,
+    repetitionDay: String,
+    notices: [{noticeDate: String, startTime: String, endTime: String }],
 });
 
 const Reminder = mongoose.model('Reminder', ReminderSchema);
