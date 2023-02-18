@@ -1,4 +1,3 @@
-//
 import Reminder from '../../models/schema/reminder.js';
 import dayjs from "dayjs";
 import reminderController from "../../controller/reminderController.js";
