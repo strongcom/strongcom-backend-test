@@ -19,7 +19,8 @@ export const getReminderList = async ctx => {
 }
 
 export const postReminder = async ctx => {
-    const reminderEntity = reminderController().main({...ctx.request.body});
+    console.log(ctx.state.user);
+    const reminderEntity = reminderController().main(ctx.request.body, ctx.state.user);
     const reminder = new Reminder(reminderEntity);
 
     try {

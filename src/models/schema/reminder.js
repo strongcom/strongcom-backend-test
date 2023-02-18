@@ -3,7 +3,10 @@ import mongoose from "mongoose";
 const {Schema} = mongoose;
 
 const ReminderSchema = new Schema({
-    userId: String,
+    userId: {
+        _id: mongoose.Types.ObjectId,
+        username: String,
+    },
     title: String,
     subTitle: String,
     content: String,

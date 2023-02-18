@@ -54,7 +54,7 @@ export default function reminderController(){
         return notices;
     }
 
-    const main = (reminderPostDto) =>{
+    const main = (reminderPostDto, user) =>{
         console.log(reminderPostDto)
         return {
             ...reminderPostDto,
@@ -65,7 +65,8 @@ export default function reminderController(){
                     repetitionPeriod:reminderPostDto.repetitionPeriod,
                     repetitionDay:reminderPostDto.repetitionDay,
                 }
-            )
+            ),
+            userId:user,
         }
     }
 
