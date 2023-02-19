@@ -20,7 +20,6 @@ const app = new Koa();
 const router = new Router();
 
 let corsOptions = {
-    origin: process.env.CLIENT_HOST,
     credentials: true,
 }
 

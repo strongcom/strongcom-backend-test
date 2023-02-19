@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 
 const UserSchema = new Schema({
-    username: String,
+    userId: String,
     hashedPassword: String,
 });
 
@@ -25,7 +25,7 @@ UserSchema.methods.generateToken = function(){
     const token = jwt.sign(
         {
             _id: this.id,
-            username: this.username,
+            userId: this.userId,
         },
         process.env.JWT_SECRET,
         {

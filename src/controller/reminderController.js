@@ -48,14 +48,14 @@ export default function reminderController(){
             while (noticeDate.isSameOrBefore(endDate, repetitionCode)){
                 notices.push(noticeDate.format('YYYY-MM-DD'));
                 noticeDate = noticeDate.add(1, repetitionCode);
-                console.log(repetitionCode)
+                // console.log(repetitionCode)
             }
         }
         return notices;
     }
 
-    const main = (reminderPostDto, user) =>{
-        console.log(reminderPostDto)
+    const reminderDtoToEntity = (reminderPostDto, user) =>{
+        // console.log(reminderPostDto);
         return {
             ...reminderPostDto,
             notices: noticesGenerator(
@@ -66,12 +66,12 @@ export default function reminderController(){
                     repetitionDay:reminderPostDto.repetitionDay,
                 }
             ),
-            userId:user,
+            userInfo:user,
         }
     }
 
     return{
         noticesGenerator,
-        main
+        reminderDtoToEntity,
     }
 }
