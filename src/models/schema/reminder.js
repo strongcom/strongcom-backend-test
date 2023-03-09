@@ -15,7 +15,7 @@ const ReminderSchema = new Schema({
     startTime: String,
     endTime: String,
     repetitionPeriod: String,
-    repetitionDay: String,
+    repetitionDay: [String],
     notices: [String],
 });
 

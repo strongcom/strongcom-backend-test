@@ -35,8 +35,8 @@ UserSchema.methods.generateToken = function(){
     return token;
 };
 
-UserSchema.statics.findByUsername = function(username){
-    return this.findOne({username});
+UserSchema.statics.findByUsername = function(userId){
+    return this.findOne({userId});
 };
 
 const User = mongoose.model('User', UserSchema);
