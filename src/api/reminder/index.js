@@ -9,6 +9,8 @@ reminders.post('/', checkLoggedIn,reminderCtrl.postReminder);
 
 const reminder = new Router();
 reminder.patch('/', checkLoggedIn, reminderCtrl.checkOwnReminder,reminderCtrl.patchReminder);
+reminder.delete('/', checkLoggedIn, reminderCtrl.checkOwnReminder,reminderCtrl.deleteReminder);
+
 
 reminders.use('/:id', reminderCtrl.getReminderById, reminder.routes());
 

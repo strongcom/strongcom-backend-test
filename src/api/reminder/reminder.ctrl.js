@@ -55,7 +55,7 @@ export const postReminder = async ctx => {
     const reminder = new Reminder(reminderEntity);
 
     try {
-        console.log('reminder post result\n', reminder)
+        console.log('reminder post result\n', remi가nder)
         await reminder.save();
         ctx.body = reminder;
     } catch (e) {
@@ -64,8 +64,7 @@ export const postReminder = async ctx => {
 };
 
 export const patchReminder = async ctx => {
-    console.log('patchReminder')
-    console.log(ctx)
+    console.log('patchReminder');
     const {id} = ctx.params;
     const reminderEntity = reminderDtoToEntity(ctx.request.body, ctx.state.user);
     try{
@@ -77,6 +76,18 @@ export const patchReminder = async ctx => {
             return;
         }
         ctx.body = reminder;
+    }catch(e){
+        ctx.throw(500, e);
+    }
+}
+
+
+export const deleteReminder = async ctx => {
+    console.log('deleteReminder');
+    const {id} = ctx.params;
+    try{
+        await Reminder.findByIdAndRemove(id).exec();
+        ctx.status = 204;
     }catch(e){
         ctx.throw(500, e);
     }
