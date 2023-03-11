@@ -7,15 +7,12 @@ const { ObjectId } = mongoose.Types;
 const {reminderDtoToEntity} = reminderController();
 
 export const getReminderList = async ctx => {
-    console.log(ctx)
+    console.log(ctx.request)
     try {
-        let query = ctx.request.query;
+        let {filter} = ctx.request.query;
         let reminderList = await Reminder.find().exec();
-        if(query.filter === 'today'){
+        if(filter === 'today'){
             reminderList = reminderList.filter(v => dayjs(v.startDate).add(-9, 'hour').isSame(dayjs(), 'day'))
-        }
-        else if(query.filter === 'active'){
-            reminderList = reminderList.filter(v => !(dayjs(v.endDate).add(-9, 'hour').isBefore(dayjs())))
         }
         ctx.body = reminderList;
     } catch (e) {
@@ -24,14 +21,14 @@ export const getReminderList = async ctx => {
 }
 
 export const getReminderById = async (ctx,next)=>{
-    console.log(ctx.params)
+    console.log('getReminderById');
     const {id} = ctx.params;
     if(!ObjectId.isValid(id)){
         ctx.status = 400;
         return;
     }
     try{
-        const reminder = await Post.findById(id);
+        const reminder = await Reminder.findById(id);
         if(!reminder){
             ctx.status = 404;
             return;
@@ -44,9 +41,9 @@ export const getReminderById = async (ctx,next)=>{
 }
 
 export const checkOwnReminder = (ctx, next) => {
-    console.log(ctx.state);
+    console.log('checkOwnReminder');
     const { user, reminder } = ctx.state;
-    if (reminder.userId._id.toString() !== user._id) {
+    if (reminder.userInfo?._id.toString() !== user._id) {
         ctx.status = 403;
         return;
     }
@@ -67,6 +64,8 @@ export const postReminder = async ctx => {
 };
 
 export const patchReminder = async ctx => {
+    console.log('patchReminder')
+    console.log(ctx)
     const {id} = ctx.params;
     const reminderEntity = reminderDtoToEntity(ctx.request.body, ctx.state.user);
     try{

@@ -27,7 +27,6 @@ export default function reminderController(){
         return 'SubTitle'
     }
 
-
     const noticesGenerator = ({startDate, endDate, repetitionPeriod, repetitionDay}) =>{
         const notices = [];
         let noticeDate = dayjs(startDate);
@@ -56,7 +55,7 @@ export default function reminderController(){
     }
 
     const reminderDtoToEntity = (reminderPostDto, user) =>{
-        // console.log(reminderPostDto);
+        console.log(user);
         return {
             ...reminderPostDto,
             notices: noticesGenerator(

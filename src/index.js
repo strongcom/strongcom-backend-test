@@ -35,7 +35,7 @@ app.use(jwtMiddleware);
 
 // app 인스턴스에 라우터 적용하기
 app.use(router.routes()).use(router.allowedMethods());
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 8080;
 app.listen(port, () => {
-    console.log('listening to port 4000');
+    console.log(`listening to port ${port}`);
 });
