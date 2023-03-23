@@ -6,11 +6,11 @@ const reminders= new Router();
 
 reminders.get('/',checkLoggedIn, reminderCtrl.getReminderList);
 reminders.post('/', checkLoggedIn,reminderCtrl.postReminder);
+reminders.get('/push', checkLoggedIn, reminderCtrl.pushReminder);
 
 const reminder = new Router();
 reminder.patch('/', checkLoggedIn, reminderCtrl.checkOwnReminder,reminderCtrl.patchReminder);
 reminder.delete('/', checkLoggedIn, reminderCtrl.checkOwnReminder,reminderCtrl.deleteReminder);
-
 
 reminders.use('/:id', reminderCtrl.getReminderById, reminder.routes());
 

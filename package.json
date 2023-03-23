@@ -12,6 +12,7 @@
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
     "expect": "^29.4.3",
+    "firebase-admin": "^11.5.0",
     "joi": "^17.7.1",
     "jsonwebtoken": "^9.0.0",
     "koa": "^2.14.1",

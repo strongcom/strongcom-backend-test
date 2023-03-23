@@ -2,6 +2,7 @@ import Reminder from '../../models/schema/reminder.js';
 import dayjs from "dayjs";
 import reminderController from "../../controller/reminderController.js";
 import mongoose from "mongoose";
+import notificationController from "../../controller/notificationController.js";
 
 const {ObjectId} = mongoose.Types;
 const {reminderDtoToEntity} = reminderController();
@@ -91,7 +92,6 @@ export const patchReminder = async ctx => {
     }
 }
 
-
 export const deleteReminder = async ctx => {
     console.log('deleteReminder');
     const {id} = ctx.params;
@@ -101,4 +101,9 @@ export const deleteReminder = async ctx => {
     } catch (e) {
         ctx.throw(500, e);
     }
+}
+
+export const pushReminder = async ctx => {
+    console.log('pushReminder');
+    ctx = notificationController(ctx);
 }
