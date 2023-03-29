@@ -102,8 +102,3 @@ export const deleteReminder = async ctx => {
         ctx.throw(500, e);
     }
 }
-
-export const pushReminder = async ctx => {
-    console.log('pushReminder');
-    ctx = notificationController(ctx);
-}
