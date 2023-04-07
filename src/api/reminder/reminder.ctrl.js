@@ -31,6 +31,16 @@ export const getReminderList = async ctx => {
     }
 }
 
+export const getReminderTitleList = async ctx => {
+    try {
+        let reminderList = await Reminder.find().exec();
+
+        ctx.body = reminderList.map(v=>({title: v.title}));
+    } catch (e) {
+        ctx.throw(500, e)
+    }
+}
+
 export const getReminderById = async (ctx, next) => {
     console.log('getReminderById');
     const {id} = ctx.params;
