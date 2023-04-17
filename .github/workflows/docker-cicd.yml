@@ -53,6 +53,6 @@ jobs:
           username: ${{ secrets.AWS_USERNAME }}
           password: ${{ secrets.AWS_PASSWORD }}
           script: |
-            docker pull {{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-            docker run -d -p 80:8080 {{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+            docker run -d -p 80:8080 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
             docker image prune -f
