@@ -16,6 +16,8 @@ mongoose.connect(process.env.MONGO_URI, {
     })
     .catch(err => console.log(err));
 
+console.log(process.env.MONGO_URI);
+
 const app = new Koa();
 const router = new Router();
 
