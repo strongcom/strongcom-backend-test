@@ -18,12 +18,12 @@ jobs:
 
       - name: Make env
         run: |
-          ls -a .
           touch ./.env
           echo "${{ secrets.ENV }}" > ./.env
           cd ./src
           touch ./strongcom-firebase-adminsdk-dewbw-03cf5bffe3.js
           echo "${{ secrets.FIREBASE }}" > ./strongcom-firebase-adminsdk-dewbw-03cf5bffe3.js
+          ls -a .
         shell: bash
 
       - name: Login to DockerHub
