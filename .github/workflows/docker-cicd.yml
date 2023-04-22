@@ -29,7 +29,6 @@ jobs:
           name: "firebase-key.json"
           json: ${{ secrets.FIREBASE }}
           dir: 'src/'
-        shell: bash
 
       - name: Login to DockerHub
         if: github.event_name != 'pull_request'
