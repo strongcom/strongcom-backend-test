@@ -22,7 +22,7 @@ jobs:
           echo "${{ secrets.ENV }}" > ./.env
           cd ./src
           touch ./strongcom-firebase-adminsdk-dewbw-03cf5bffe3.json
-          echo "${{secrets.FIREBASE}}" > ./strongcom-firebase-adminsdk-dewbw-03cf5bffe3.json
+          echo "${{ secrets.FIREBASE }}" > ./strongcom-firebase-adminsdk-dewbw-03cf5bffe3.json
         shell: bash
 
       - name: Login to DockerHub
