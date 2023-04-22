@@ -18,7 +18,6 @@ jobs:
 
       - name: Make env
         run: |
-          cd
           touch ./.env
           echo "${{ secrets.ENV }}" > ./.env
           cd ./src
