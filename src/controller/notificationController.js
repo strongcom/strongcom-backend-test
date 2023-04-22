@@ -1,11 +1,11 @@
 import admin from 'firebase-admin';
-import serviceAccount from '../strongcom-firebase-adminsdk-dewbw-03cf5bffe3.json' assert { type: "json" };
+import {firebaseKey} from '../strongcom-firebase-adminsdk-dewbw-03cf5bffe3.js';
 export default async function notificationController(ctx){
     let deviceToken ='cdjNdVk_Rme3Z4E8868dmo:APA91bGIvnL4HogW7-p3_gtrJ1sYeVIR2XzOEJGHXOhL563ODarBzAJLjZCSecYc4H8our__ItYrEdXW--yhKi279C1Ir7EAx6lRE-Ivv25N6ooIco_B4sHjbE0fXSqAVdSklX13a8mS';
 
     if (!admin.apps.length) {
         let firebaseAdmin = admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount),
+            credential: admin.credential.cert(firebaseKey),
         });
     }
 
