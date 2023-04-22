@@ -18,6 +18,7 @@ jobs:
 
       - name: Make env
         run: |
+          cd
           touch ./.env
           echo "${{ secrets.ENV }}" > ./.env
         shell: bash
@@ -53,6 +54,6 @@ jobs:
           username: ${{ secrets.AWS_USERNAME }}
           password: ${{ secrets.AWS_PASSWORD }}
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-            docker run -d -p 80:8080 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:main
+            docker run -d -p 80:8080 --name server ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:main
             docker image prune -f
