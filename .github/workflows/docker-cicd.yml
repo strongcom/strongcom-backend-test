@@ -24,7 +24,7 @@ jobs:
           touch ./strongcom-firebase-adminsdk-dewbw-03cf5bffe3.js
           echo "${{ secrets.FIREBASE }}" > ./strongcom-firebase-adminsdk-dewbw-03cf5bffe3.js
           ls -a .
-        shell: bash
+        shell: sh
 
       - name: Login to DockerHub
         if: github.event_name != 'pull_request'

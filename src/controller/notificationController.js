@@ -9,6 +9,7 @@ export default async function notificationController(ctx){
         });
     }
 
+    console.log(firebaseKey.private_key_id)
     let message = {
         notification:{
             title:'test',
