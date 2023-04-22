@@ -20,11 +20,16 @@ jobs:
         run: |
           touch ./.env
           echo "${{ secrets.ENV }}" > ./.env
-          cd ./src
-          touch ./strongcom-firebase-adminsdk-dewbw-03cf5bffe3.json
-          echo "${{ secrets.FIREBASE }}" > ./strongcom-firebase-adminsdk-dewbw-03cf5bffe3.json
-          echo "${{ secrets.FIREBASE }}"
-        shell: sh
+        shell: bash
+
+      - name: Create firesbase key json
+        id: create-json
+        uses: jsdaniell/create-json@1.2.2
+        with:
+          name: "firebase-key.json"
+          json: ${{ secrets.FIREBASE }}
+          dir: 'src/'
+        shell: bash
 
       - name: Login to DockerHub
         if: github.event_name != 'pull_request'
@@ -57,6 +62,8 @@ jobs:
           username: ${{ secrets.AWS_USERNAME }}
           password: ${{ secrets.AWS_PASSWORD }}
           script: |
+            docker stop server
+            docker rm server
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:main
             docker run -d -p 80:8080 --name server ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:main
             docker image prune -f

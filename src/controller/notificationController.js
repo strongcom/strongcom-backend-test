@@ -1,5 +1,5 @@
 import admin from 'firebase-admin';
-import firebaseKey from '../strongcom-firebase-adminsdk-dewbw-03cf5bffe3.json' assert {type: "json"};
+import firebaseKey from '../firebase-key.json' assert {type: "json"};
 export default async function notificationController(ctx){
     let deviceToken ='cdjNdVk_Rme3Z4E8868dmo:APA91bGIvnL4HogW7-p3_gtrJ1sYeVIR2XzOEJGHXOhL563ODarBzAJLjZCSecYc4H8our__ItYrEdXW--yhKi279C1Ir7EAx6lRE-Ivv25N6ooIco_B4sHjbE0fXSqAVdSklX13a8mS';
 
@@ -8,8 +8,6 @@ export default async function notificationController(ctx){
             credential: admin.credential.cert(firebaseKey),
         });
     }
-
-    console.log(firebaseKey)
 
     let message = {
         notification:{
