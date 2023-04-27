@@ -5,9 +5,12 @@ export const test = async ctx => {
 }
 
 export const detectedUser = async ctx => {
-    const {userId} = ctx.request.body;
+    const {userId, time} = ctx.request.body;
     try{
-        ctx.body = userId;
+        ctx.body = {
+            userId: userId,
+            time: time,
+        };
     }catch (e) {
         ctx.throw(500, e);
     }
