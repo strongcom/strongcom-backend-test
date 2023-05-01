@@ -28,6 +28,7 @@ export default function reminderController(){
     }
 
     const noticesGenerator = ({startDate, endDate, repetitionPeriod, repetitionDay}) =>{
+        console.log(repetitionPeriod);
         const notices = [];
         let noticeDate = dayjs(startDate);
         const repetitionCode = repetitionCodeList[repetitionPeriod];
@@ -45,10 +46,15 @@ export default function reminderController(){
                 }
             }
         }else{
-            while (noticeDate.isSameOrBefore(endDate, repetitionCode)){
-                notices.push(noticeDate.format('YYYY-MM-DD'));
-                noticeDate = noticeDate.add(1, repetitionCode);
-                // console.log(repetitionCode)
+            if(!repetitionCode){
+                const today = dayjs().format('YYYY-MM-DD');
+                notices.push(today);
+            }else{
+                while (noticeDate.isSameOrBefore(endDate, repetitionCode)){
+                    notices.push(noticeDate.format('YYYY-MM-DD'));
+                    noticeDate = noticeDate.add(1, repetitionCode);
+                    // console.log(repetitionCode)
+                }
             }
         }
         return notices;
@@ -70,8 +76,25 @@ export default function reminderController(){
         }
     }
 
+    const generateReminderByTitle = (title, user)=>{
+        return {
+            title:title,
+            content: null,
+            subTitle: '오늘 한번 울리는 알람입니다',
+            startDate: dayjs().format('YYYY-MM-DD'),
+            endDate: dayjs().format('YYYY-MM-DD'),
+            startTime: '00:00:00',
+            endTime: '23:59:59',
+            repetitionPeriod: null,
+            repetitionDay: null,
+            notices:[dayjs().format('YYYY-MM-DD')],
+            userInfo: user,
+        }
+    }
+
     return{
         noticesGenerator,
         reminderDtoToEntity,
+        generateReminderByTitle
     }
 }

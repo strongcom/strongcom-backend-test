@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import notificationController from "../../controller/notificationController.js";
 
 const {ObjectId} = mongoose.Types;
-const {reminderDtoToEntity} = reminderController();
+const {reminderDtoToEntity,generateReminderByTitle} = reminderController();
 
 export const getReminderList = async ctx => {
     console.log(ctx.request)
@@ -83,6 +83,18 @@ export const postReminder = async ctx => {
         ctx.throw(500, e);
     }
 };
+
+export const postReminderByTitle = async ctx => {
+    const {title} = ctx.request.body;
+    const reminder = new Reminder(generateReminderByTitle(title,ctx.state.user));
+
+    try {
+        await reminder.save();
+        ctx.body = reminder;
+    } catch (e){
+        ctx.throw(500, e);
+    }
+}
 
 export const patchReminder = async ctx => {
     console.log('patchReminder');
