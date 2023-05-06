@@ -9,7 +9,8 @@ const reminders= new Router();
 reminders.get('/', reminderCtrl.getReminderList);
 reminders.get('/title', reminderCtrl.getReminderTitleList);
 reminders.post('/', checkLoggedIn,reminderCtrl.postReminder);
-reminders.post('/title', checkLoggedIn,reminderCtrl.postReminderByTitle);
+// reminders.post('/title', checkLoggedIn,reminderCtrl.postReminderByTitle);
+reminders.post('/title',reminderCtrl.postReminderByTitle);
 
 const reminder = new Router();
 reminder.patch('/', checkLoggedIn, reminderCtrl.checkOwnReminder,reminderCtrl.patchReminder);
