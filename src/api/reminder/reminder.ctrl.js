@@ -91,7 +91,7 @@ export const postReminderByTitle = async ctx => {
     try {
         await reminder.save();
         ctx.body = {
-            title: reminder.title;
+            title: reminder.title
         }
     } catch (e){
         ctx.throw(500, e);
