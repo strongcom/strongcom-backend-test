@@ -1,7 +1,7 @@
 import admin from 'firebase-admin';
 import firebaseKey from '../firebase-key.json' assert {type: "json"};
 export default async function notificationController(ctx){
-    let deviceToken ='dhWiH13_Rr-46Tj_gdI-0N:APA91bG4VC9Yv12ky5vBD_67iND6CKKkGJAjhOUzJV_7GS3bWLdeQZChSvHf8fPWCyNm4rEj8HIzUjJopFoEPN4Pq0pWUS8_rQwn2j0wGB-pHn6JjLu3QYHbfJSULdupNzdqdxRKZmXK';
+    let deviceToken ='cdjNdVk_Rme3Z4E8868dmo:APA91bGIvnL4HogW7-p3_gtrJ1sYeVIR2XzOEJGHXOhL563ODarBzAJLjZCSecYc4H8our__ItYrEdXW--yhKi279C1Ir7EAx6lRE-Ivv25N6ooIco_B4sHjbE0fXSqAVdSklX13a8mS';
 
     if (!admin.apps.length) {
         let firebaseAdmin = admin.initializeApp({
