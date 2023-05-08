@@ -11,8 +11,7 @@ export default async function notificationController(ctx){
 
     let message = {
         notification:{
-            title:'test',
-            body:'test message'
+            title:'텀블러 챙기기',
         },
         token: deviceToken
     }
