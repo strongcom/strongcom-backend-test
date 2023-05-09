@@ -1,7 +1,12 @@
 import notificationController from "../../controller/notificationController.js";
 
+const {testPush} = notificationController();
 export const test = async ctx => {
-    ctx = {...await notificationController(ctx)}
+    try{
+        ctx = {...await testPush(ctx)};
+    }catch (e){
+        ctx.throw(500, e);
+    }
 }
 
 export const detectedUser = async ctx => {
