@@ -5,10 +5,10 @@ export const test = async ctx => {
 }
 
 export const detectedUser = async ctx => {
-    const {userId, time} = ctx.request.body;
+    const {username, time} = ctx.request.body;
     try{
         ctx.body = {
-            userId: userId,
+            username: username,
             time: time,
         };
     }catch (e) {

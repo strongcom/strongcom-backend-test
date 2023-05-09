@@ -6,7 +6,7 @@ const {registerValidationCheck, usernameDuplicate} = authController();
 
 export const register = async ctx =>{
     console.log(ctx);
-    const {userId, password} = ctx.request.body;
+    const {username, password} = ctx.request.body;
     const result = registerValidationCheck(ctx.request.body);
     if(result.error) {
         ctx.status = 400;
@@ -15,13 +15,13 @@ export const register = async ctx =>{
     }
 
     try{
-        const exists = await usernameDuplicate(userId);
+        const exists = await usernameDuplicate(username);
         if(exists) {
             ctx.status = 409;
             return;
         }
 
-        const user = new User({userId,});
+        const user = new User({username,});
         await user.setPassword(password);
         await user.save();
         ctx.body = user.serialize();
@@ -36,15 +36,15 @@ export const register = async ctx =>{
 };
 
 export const login = async ctx =>{
-    const { userId, password} = ctx.request.body;
+    const { username, password} = ctx.request.body;
 
-    if(!userId|| !password) {
+    if(!username|| !password) {
         ctx.status = 401;
         return;
     }
 
     try{
-        const user = await User.findByUsername(userId);
+        const user = await User.findByUsername(username);
         if(!user){
             ctx.status = 401;
             return;

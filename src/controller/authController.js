@@ -4,14 +4,14 @@ import User from "../models/schema/user.js";
 export default function authController(){
     const registerValidationCheck= (body) => {
         const schema = Joi.object().keys({
-            userId: Joi.string().alphanum().min(3).max(20).required(),
+            username: Joi.string().alphanum().min(3).max(20).required(),
             password: Joi.string().required(),
         });
         return schema.validate(body);
     }
 
-    const usernameDuplicate = async (userId) => {
-        const exists = await User.findByUsername(userId);
+    const usernameDuplicate = async (username) => {
+        const exists = await User.findByUsername(username);
         return !!exists;
     }
 

@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 
 const UserSchema = new Schema({
-    userId: String,
+    username: String,
     hashedPassword: String,
 });
 
@@ -25,7 +25,7 @@ UserSchema.methods.generateToken = function(){
     const token = jwt.sign(
         {
             _id: this.id,
-            userId: this.userId,
+            username: this.username,
         },
         process.env.JWT_SECRET,
         {
@@ -35,8 +35,8 @@ UserSchema.methods.generateToken = function(){
     return token;
 };
 
-UserSchema.statics.findByUsername = function(userId){
-    return this.findOne({userId});
+UserSchema.statics.findByUsername = function(username){
+    return this.findOne({username});
 };
 
 const User = mongoose.model('User', UserSchema);

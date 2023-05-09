@@ -5,7 +5,7 @@ const {Schema} = mongoose;
 const ReminderSchema = new Schema({
     userInfo: {
         _id: mongoose.Types.ObjectId,
-        userId: String,
+        username: String,
     },
     title: String,
     subTitle: String,
