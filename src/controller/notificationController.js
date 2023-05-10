@@ -36,11 +36,10 @@ export default function notificationController() {
         return ctx;
     }
 
-    const findTodayReminders = async ({username}) => {
+    const findTodayReminders = async ({user}) => {
         const date = dayjs();
         const today = date.format('YYYY-MM-DD');
         const now = date.format('hh:mm:ss');
-        const user = await User.findOne({username: username});
         return Reminder
             .find({
                 $and: [
@@ -52,11 +51,11 @@ export default function notificationController() {
             });
     };
 
-    const removeNoticesDate = async ({username}) => {
+    const removeNoticesDate = async ({user}) => {
         const date = dayjs();
         const today = date.format('YYYY-MM-DD');
         const now = date.format('hh:mm:ss');
-        const user = await User.findOne({username: username});
+
         await Reminder.updateMany({
                 $and: [
                     {"userInfo._id": user._id},
@@ -75,18 +74,20 @@ export default function notificationController() {
     }
 
     const pushNotifications = async (ctx) => {
-        const todayReminders = await findTodayReminders({username: ctx.request.body.username})
+        const user = await User.findOne({username: ctx.request.body.username});
+        const todayReminders = await findTodayReminders({user: user});
 
         for (const reminder of todayReminders) {
+            console.log(reminder)
             let message = {
                 notification: {
                     title: reminder.title,
                 },
                 token: user.targetToken
             };
-            await pushNotice(message);
+            await pushNotice({message:message});
         }
-        await removeNoticesDate({username: ctx.request.body.username}).then(
+        await removeNoticesDate({user: user}).then(
             await removeCompletedReminder()
         )
     }
