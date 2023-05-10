@@ -2,7 +2,6 @@ import admin from 'firebase-admin';
 import firebaseKey from '../firebase-key.json' assert {type: "json"};
 import User from "../models/schema/user.js";
 import Reminder from "../models/schema/reminder.js";
-import {re} from "@babel/core/lib/vendor/import-meta-resolve.js";
 import dayjs from "dayjs";
 
 export default function notificationController() {
