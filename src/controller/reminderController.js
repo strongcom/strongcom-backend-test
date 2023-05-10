@@ -15,8 +15,7 @@ const dayOfWeekCodeList = {
 }
 
 const repetitionCodeList = {
-    null: null,
-    undefined: null,
+    BASIC: 'day',
     DAILY: 'day',
     WEEKLY: 'day',
     MONTHLY: 'month',
@@ -27,7 +26,13 @@ export default function reminderController(){
     const repetitionValidationCheck= (body) => {
         const schema = Joi.object().keys({
             title: Joi.string().required(),
-            repetitionPeriod: Joi.string().not(null)
+            content: Joi.string().optional(),
+            startDate: Joi.string().optional().allow(null).isoDate(),
+            endDate: Joi.string().optional().allow(null).isoDate(),
+            startTime: Joi.string().optional().allow(null),
+            endTime: Joi.string().optional().allow(null),
+            repetitionPeriod: Joi.string().not(null),
+            repetitionDay: Joi.string().optional().allow(null),
         });
         return schema.validate(body);
     };
@@ -85,17 +90,18 @@ export default function reminderController(){
     }
 
     const generateReminderByTitle = (title, user)=>{
+        const today = dayjs().format('YYYY-MM-DD');
         return {
             title:title,
             content: null,
             subTitle: '오늘 한번 울리는 알람입니다',
-            startDate: dayjs().format('YYYY-MM-DD'),
-            endDate: dayjs().format('YYYY-MM-DD'),
+            startDate: today,
+            endDate: today,
             startTime: '00:00:00',
             endTime: '23:59:59',
             repetitionPeriod: null,
             repetitionDay: null,
-            notices:[dayjs().format('YYYY-MM-DD')],
+            notices:[today],
             userInfo: user,
         }
     }
