@@ -71,7 +71,7 @@ export default function notificationController() {
     }
 
     const pushNotifications = async (ctx) => {
-        const user = await User.find함One({username: ctx.request.body.username});
+        const user = await User.findOne({username: ctx.request.body.username});
         const todayReminders = await findTodayReminders({user: user});
 
         for (const reminder of todayReminders) {
