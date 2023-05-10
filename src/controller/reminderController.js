@@ -1,5 +1,6 @@
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore.js";
 import dayjs from "dayjs";
+import Joi from "joi";
 
 dayjs.extend(isSameOrBefore);
 
@@ -23,17 +24,30 @@ const repetitionCodeList = {
 }
 export default function reminderController(){
 
+    const repetitionValidationCheck= (body) => {
+        const schema = Joi.object().keys({
+            title: Joi.string().required(),
+            repetitionPeriod: Joi.string().not(null)
+        });
+        return schema.validate(body);
+    };
+
+    const titleValidationCheck= (body) => {
+        const schema = Joi.object().keys({
+            title: Joi.string().required(),
+        });
+        return schema.validate(body);
+    };
+
     const subTitleGenerator = () =>{
         return 'SubTitle'
     }
 
     const noticesGenerator = ({startDate, endDate, repetitionPeriod, repetitionDay}) =>{
-        console.log(repetitionPeriod);
         const notices = [];
         let noticeDate = dayjs(startDate);
         const repetitionCode = repetitionCodeList[repetitionPeriod];
         if(repetitionPeriod === 'WEEKLY'){
-            console.log(repetitionDay);
             const startDateObject = dayjs(startDate);
             let inputDayOfWeek = repetitionDay.map(v => dayOfWeekCodeList[v]).sort((a, b) => a - b);
             for (let i = 0; ; i++){
@@ -46,15 +60,9 @@ export default function reminderController(){
                 }
             }
         }else{
-            if(!repetitionCode){
-                const today = dayjs().format('YYYY-MM-DD');
-                notices.push(today);
-            }else{
-                while (noticeDate.isSameOrBefore(endDate, repetitionCode)){
-                    notices.push(noticeDate.format('YYYY-MM-DD'));
-                    noticeDate = noticeDate.add(1, repetitionCode);
-                    // console.log(repetitionCode)
-                }
+            while (noticeDate.isSameOrBefore(endDate, repetitionCode)){
+                notices.push(noticeDate.format('YYYY-MM-DD'));
+                noticeDate = noticeDate.add(1, repetitionCode);
             }
         }
         return notices;
@@ -93,6 +101,8 @@ export default function reminderController(){
     }
 
     return{
+        repetitionValidationCheck,
+        titleValidationCheck,
         noticesGenerator,
         reminderDtoToEntity,
         generateReminderByTitle

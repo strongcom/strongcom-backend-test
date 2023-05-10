@@ -5,7 +5,12 @@ import mongoose from "mongoose";
 import notificationController from "../../controller/notificationController.js";
 
 const {ObjectId} = mongoose.Types;
-const {reminderDtoToEntity,generateReminderByTitle} = reminderController();
+const {
+    reminderDtoToEntity,
+    generateReminderByTitle,
+    repetitionValidationCheck,
+    titleValidationCheck
+} = reminderController();
 
 export const getReminderList = async ctx => {
     console.log(ctx.request)
@@ -16,8 +21,8 @@ export const getReminderList = async ctx => {
             // reminderList = reminderList.filter(v => dayjs(v.startDate).add(-9, 'hour').isSame(dayjs(), 'day'))
             reminderList = reminderList.filter(reminder => {
                 let today = false;
-                for(let date of reminder.notices){
-                    if(dayjs(date).isSame(dayjs())){
+                for (let date of reminder.notices) {
+                    if (dayjs(date).isSame(dayjs())) {
                         today = true;
                         break;
                     }
@@ -34,8 +39,7 @@ export const getReminderList = async ctx => {
 export const getReminderTitleList = async ctx => {
     try {
         let reminderList = await Reminder.find().exec();
-
-        ctx.body = reminderList.map(v=>({title: v.title}));
+        ctx.body = reminderList.map(v => ({title: v.title}));
     } catch (e) {
         ctx.throw(500, e)
     }
@@ -72,6 +76,13 @@ export const checkOwnReminder = (ctx, next) => {
 };
 
 export const postReminder = async ctx => {
+    const validationCheck = repetitionValidationCheck(ctx.request.body)
+    if (validationCheck.error) {
+        ctx.status = 400;
+        ctx.body = validationCheck.error
+        return;
+    }
+
     const reminderEntity = reminderDtoToEntity(ctx.request.body, ctx.state.user);
     const reminder = new Reminder(reminderEntity);
 
@@ -85,15 +96,23 @@ export const postReminder = async ctx => {
 };
 
 export const postReminderByTitle = async ctx => {
+    const titleValidation = titleValidationCheck(ctx.request.body);
+
+    if (titleValidation.error){
+        ctx.status = 400;
+        ctx.body = titleValidation.error;
+        return
+    }
+
     const {title} = ctx.request.body;
-    const reminder = new Reminder(generateReminderByTitle(title,ctx.state.user));
+    const reminder = new Reminder(generateReminderByTitle(title, ctx.state.user));
 
     try {
         await reminder.save();
         ctx.body = {
             title: reminder.title
         }
-    } catch (e){
+    } catch (e) {
         ctx.throw(500, e);
     }
 }

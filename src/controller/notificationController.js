@@ -23,16 +23,13 @@ export default function notificationController() {
     }
     const testPush = async (ctx) => {
         let deviceToken = 'cdjNdVk_Rme3Z4E8868dmo:APA91bGIvnL4HogW7-p3_gtrJ1sYeVIR2XzOEJGHXOhL563ODarBzAJLjZCSecYc4H8our__ItYrEdXW--yhKi279C1Ir7EAx6lRE-Ivv25N6ooIco_B4sHjbE0fXSqAVdSklX13a8mS';
-
         let message = {
             notification: {
                 title: '텀블러 챙기기',
             },
             token: deviceToken
         }
-
         await pushNotice(message);
-
         return ctx;
     }
 
@@ -74,7 +71,7 @@ export default function notificationController() {
     }
 
     const pushNotifications = async (ctx) => {
-        const user = await User.findOne({username: ctx.request.body.username});
+        const user = await User.find함One({username: ctx.request.body.username});
         const todayReminders = await findTodayReminders({user: user});
 
         for (const reminder of todayReminders) {
