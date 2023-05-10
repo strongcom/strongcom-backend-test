@@ -58,6 +58,7 @@ export default function notificationController() {
                 },
                 token: user.targetToken
             };
+            console.log(reminder.title);
             await admin
                 .messaging()
                 .send(message)
