@@ -11,8 +11,10 @@ export const test = async ctx => {
 
 export const detectedUser = async ctx => {
     const {username, time} = ctx.request.body;
-    await pushNotifications(ctx);
+
     try{
+        await pushNotifications(ctx);
+        ctx.status = 204;
         ctx.body = {
             username: username,
             time: time,

@@ -63,12 +63,9 @@ export default function notificationController() {
                 .send(message)
                 .then((response) => {
                     console.log('success', response);
-                    ctx.status = 204;
                 })
                 .catch((error) => {
                     console.log('success', error);
-                    ctx.status = 404;
-                    ctx.body = error;
                 });
         }
     }
