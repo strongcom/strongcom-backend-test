@@ -50,15 +50,13 @@ export default function notificationController() {
                     {endTime: {$gte: now}},
                 ]
             });
-        console.log(user.targetToken);
-        for (const reminder in todayReminders) {
+        for (const reminder of todayReminders) {
             let message = {
                 notification: {
                     title: reminder.title,
                 },
                 token: user.targetToken
             };
-            console.log(reminder.title);
             await admin
                 .messaging()
                 .send(message)
