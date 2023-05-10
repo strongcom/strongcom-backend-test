@@ -6,7 +6,7 @@ const {registerValidationCheck, usernameDuplicate} = authController();
 
 export const register = async ctx =>{
     console.log(ctx);
-    const {username, password} = ctx.request.body;
+    const {username, password, targetToken} = ctx.request.body;
     const result = registerValidationCheck(ctx.request.body);
     if(result.error) {
         ctx.status = 400;
@@ -21,7 +21,7 @@ export const register = async ctx =>{
             return;
         }
 
-        const user = new User({username,});
+        const user = new User({username, targetToken});
         await user.setPassword(password);
         await user.save();
         ctx.body = user.serialize();

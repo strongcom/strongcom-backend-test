@@ -6,6 +6,7 @@ export default function authController(){
         const schema = Joi.object().keys({
             username: Joi.string().alphanum().min(3).max(20).required(),
             password: Joi.string().required(),
+            targetToken: Joi.string().required(),
         });
         return schema.validate(body);
     }
