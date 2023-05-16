@@ -51,7 +51,7 @@ export const getReminderTitleList = async ctx => {
     }
 }
 
-export const getReminderById = async (ctx, next) => {
+export const findReminderById = async (ctx, next) => {
     console.log('getReminderById');
     const {id} = ctx.params;
     if (!ObjectId.isValid(id)) {
@@ -68,6 +68,15 @@ export const getReminderById = async (ctx, next) => {
         return next();
     } catch (e) {
         ctx.throw(500, e);
+    }
+}
+
+export const getReminderById = async ctx=>{
+    try{
+        ctx.status = 200;
+        ctx.body = ctx.state.reminder
+    }catch (e) {
+        ctx.status = 500;
     }
 }
 
