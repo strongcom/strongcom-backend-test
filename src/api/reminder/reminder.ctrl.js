@@ -2,7 +2,10 @@ import Reminder from '../../models/schema/reminder.js';
 import dayjs from "dayjs";
 import reminderController from "../../controller/reminderController.js";
 import mongoose from "mongoose";
-import notificationController from "../../controller/notificationController.js";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore.js";
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
 
 const {ObjectId} = mongoose.Types;
 const {
@@ -15,24 +18,27 @@ const {
 export const getReminderList = async ctx => {
     console.log(ctx.request)
     try {
-        let {filter} = ctx.request.query;
-        let reminderList = await Reminder.find().exec();
-        if (filter === 'today') {
-            // reminderList = reminderList.filter(v => dayjs(v.startDate).add(-9, 'hour').isSame(dayjs(), 'day'))
-            reminderList = reminderList.filter(reminder => {
-                let today = false;
+        ctx.body = await Reminder.find().exec();
+    } catch (e) {
+        ctx.throw(500, e);
+    }
+}
+
+export const getTodayReminderList = async ctx => {
+    try{
+        ctx.body = (await Reminder
+            .find().exec())
+            .filter(reminder => {
                 for (let date of reminder.notices) {
-                    if (dayjs(date).isSame(dayjs())) {
-                        today = true;
-                        break;
+                    if (dayjs(`${date}T${reminder.startTime}`).isSameOrBefore(dayjs())
+                        && dayjs(`${date}T${reminder.endTime}`).isSameOrAfter(dayjs())) {
+                        return true;
                     }
                 }
-                return today;
+                return false;
             });
-        }
-        ctx.body = reminderList;
-    } catch (e) {
-        ctx.throw(500, e)
+    }catch (e){
+        ctx.throw(500, e);
     }
 }
 
@@ -85,6 +91,8 @@ export const postReminder = async ctx => {
 
     const reminderEntity = reminderDtoToEntity(ctx.request.body, ctx.state.user);
     const reminder = new Reminder(reminderEntity);
+
+    console.log(reminder);
 
     try {
         console.log('reminder post result\n', reminder)

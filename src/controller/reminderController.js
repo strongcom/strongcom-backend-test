@@ -54,7 +54,7 @@ export default function reminderController(){
         const repetitionCode = repetitionCodeList[repetitionPeriod];
         if(repetitionPeriod === 'WEEKLY'){
             const startDateObject = dayjs(startDate);
-            let inputDayOfWeek = repetitionDay.map(v => dayOfWeekCodeList[v]).sort((a, b) => a - b);
+            let inputDayOfWeek = repetitionDay.split(' ').map(v => dayOfWeekCodeList[v]).sort((a, b) => a - b);
             for (let i = 0; ; i++){
                 noticeDate = startDateObject.set(repetitionCode,inputDayOfWeek[i%inputDayOfWeek.length] + (7 * Math.floor(i/inputDayOfWeek.length)));
                 if(!noticeDate.isSameOrBefore(endDate, repetitionCode)){

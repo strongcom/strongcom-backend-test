@@ -1,12 +1,13 @@
 import Router from 'koa-router';
 import * as reminderCtrl from './reminder.ctrl.js';
 import checkLoggedIn from "../../../lib/checkLoggedIn.js";
-import {getReminderTitleList, postReminderByTitle} from "./reminder.ctrl.js";
+import {getReminderTitleList, getTodayReminderList, postReminderByTitle} from "./reminder.ctrl.js";
 
 const reminders= new Router();
 
 // reminders.get('/',checkLoggedIn, reminderCtrl.getReminderList);
 reminders.get('/', reminderCtrl.getReminderList);
+reminders.get('/today', reminderCtrl.getTodayReminderList);
 reminders.get('/title', reminderCtrl.getReminderTitleList);
 reminders.post('/', checkLoggedIn,reminderCtrl.postReminder);
 // reminders.post('/title', checkLoggedIn,reminderCtrl.postReminderByTitle);
