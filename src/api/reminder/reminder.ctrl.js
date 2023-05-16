@@ -20,7 +20,7 @@ export const getReminderList = async ctx => {
     try {
         ctx.body = (await Reminder
             .find().exec())
-            .map(reminder => ({title: reminder.title, subTitle: reminder.subTitle}))
+            .map(reminder => ({id: reminder.id,title: reminder.title, subTitle: reminder.subTitle}))
     } catch (e) {
         ctx.throw(500, e);
     }
