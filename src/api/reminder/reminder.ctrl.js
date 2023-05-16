@@ -18,7 +18,9 @@ const {
 export const getReminderList = async ctx => {
     console.log(ctx.request)
     try {
-        ctx.body = await Reminder.find().exec();
+        ctx.body = (await Reminder
+            .find().exec())
+            .map(reminder => ({title: reminder.title, subTitle: reminder.subTitle}))
     } catch (e) {
         ctx.throw(500, e);
     }
