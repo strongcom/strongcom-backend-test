@@ -45,7 +45,7 @@ app.use(views(path.join('src/','views'),{
 }));
 
 app.use(async (ctx) => {
-    await ctx.render('login');
+    await ctx.render('login', {clientId: process.env.KAKAO_ID, redirectUri: process.env.BIXBY_URL});
 });
 //포트 개방
 const port = process.env.PORT || 8080;
