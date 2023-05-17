@@ -6,6 +6,8 @@ import mongoose from 'mongoose';
 import api from './api/index.js';
 import jwtMiddleware from "../lib/jwtMiddleware.js";
 import 'dotenv/config';
+import views from "koa-views";
+import * as path from "path";
 
 
 mongoose.connect(process.env.MONGO_URI, {
@@ -37,6 +39,15 @@ app.use(jwtMiddleware);
 
 // app 인스턴스에 라우터 적용하기
 app.use(router.routes()).use(router.allowedMethods());
+
+app.use(views(path.join('src/','views'),{
+    extension: 'nunjucks'
+}));
+
+app.use(async (ctx) => {
+    await ctx.render('login');
+});
+//포트 개방
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(`listening to port ${port}`);
