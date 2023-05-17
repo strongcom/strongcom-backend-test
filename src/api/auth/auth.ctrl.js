@@ -1,22 +1,21 @@
-import Joi from "joi";
 import User from "../../models/schema/user.js";
 import authController from "../../controller/authController.js";
 
 const {registerValidationCheck, usernameDuplicate} = authController();
 
-export const register = async ctx =>{
+export const register = async ctx => {
     console.log(ctx);
     const {username, password, targetToken} = ctx.request.body;
     const result = registerValidationCheck(ctx.request.body);
-    if(result.error) {
+    if (result.error) {
         ctx.status = 400;
         ctx.body = result.error;
         return;
     }
 
-    try{
+    try {
         const exists = await usernameDuplicate(username);
-        if(exists) {
+        if (exists) {
             ctx.status = 409;
             return;
         }
@@ -25,55 +24,55 @@ export const register = async ctx =>{
         await user.setPassword(password);
         await user.save();
         ctx.body = user.serialize();
-        const token = user.generateToken();
-        ctx.cookies.set('access_token', token,{
-            maxAge: 1000*60 * 60 * 24 *7,
+        const accessToken = user.generateToken();
+        const refreshToken = user.generateToken();
+        ctx.cookies.set('access_token', accessToken, {
+            maxAge: 1000 * 60 * 60,
             httpOnly: true,
         });
-    }catch(e){
-        ctx.throw(500,e);
+        ctx.cookies.set('refresh_token', refreshToken, {
+            maxAge: 1000 * 60 * 60 * 24 * 30,
+            httpOnly: true,
+        });
+    } catch (e) {
+        ctx.throw(500, e);
     }
 };
 
-export const login = async ctx =>{
-    const { username, password} = ctx.request.body;
+export const login = async ctx => {
+    const {username, password} = ctx.request.body;
 
-    if(!username|| !password) {
+    if (!username || !password) {
         ctx.status = 401;
         return;
     }
 
-    try{
+    try {
         const user = await User.findByUsername(username);
-        if(!user){
+        if (!user) {
             ctx.status = 401;
             return;
         }
         const valid = await user.checkPassword(password);
-        if(!valid){
+        if (!valid) {
             ctx.status = 401;
             return;
         }
         ctx.body = user.serialize();
-        const token = user.generateToken();
-        ctx.cookies.set('access_token', token,{
-            maxAge: 1000*60 * 60 * 24 *7,
-            httpOnly: true,
-        });
-    }catch(e){
-        ctx.throw(500,e);
+    } catch (e) {
+        ctx.throw(500, e);
     }
 };
 
-export const check = async ctx =>{
+export const check = async ctx => {
     const {user} = ctx.state;
-    if(!user){
-        ctx.status =401;
+    if (!user) {
+        ctx.status = 401;
         return;
     }
     ctx.body = user;
 };
 
-export const logout = async ctx =>{
+export const logout = async ctx => {
 
 };
