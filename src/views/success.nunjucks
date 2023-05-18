@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>로그인 결과</title>
+</head>
+<body>
+  <h1>로그인 결과</h1>
+
+  <script>
+    function getQueryParamValue(key) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(key);
+    }
+
+    const code = getQueryParamValue('code');
+    if (code) {
+      const nameElement = document.createElement('p');
+      nameElement.textContent = `Code: ${code}`;
+      document.body.appendChild(nameElement);
+    }
+  </script>
+</body>
+</html>

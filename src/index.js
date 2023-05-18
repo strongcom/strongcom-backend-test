@@ -6,9 +6,9 @@ import mongoose from 'mongoose';
 import api from './api/index.js';
 import jwtMiddleware from "../lib/jwtMiddleware.js";
 import 'dotenv/config';
-import views from "koa-views";
-import * as path from "path";
-
+import pages from "./views/index.js";
+import passport from "koa-passport";
+import session from 'koa-session'
 
 mongoose.connect(process.env.MONGO_URI, {
     dbName: 'strongcom',
@@ -17,8 +17,6 @@ mongoose.connect(process.env.MONGO_URI, {
         console.log('Connecting to MongoDB');
     })
     .catch(err => console.log(err));
-
-console.log(process.env.MONGO_URI);
 
 const app = new Koa();
 const router = new Router();
@@ -32,21 +30,20 @@ app.proxy = true; // true 일때 proxy 헤더들을 신뢰함
 app.use(cors(corsOptions));
 
 router.use('/api', api.routes());
+router.use('/views', pages.routes());
+
+app.keys = ['your-session-secret'];
+app.use(session({}, app));
 
 // 라우터를 적용하기 전에 bodyParser를 먼저 적용해야함.
 app.use(bodyParser());
 app.use(jwtMiddleware);
+app.use(passport.initialize());
+app.use(passport.session());
 
 // app 인스턴스에 라우터 적용하기
 app.use(router.routes()).use(router.allowedMethods());
 
-app.use(views(path.join('src/','views'),{
-    extension: 'nunjucks'
-}));
-
-app.use(async (ctx) => {
-    await ctx.render('login', {clientId: process.env.KAKAO_ID, redirectUri: process.env.BIXBY_URL});
-});
 //포트 개방
 const port = process.env.PORT || 8080;
 app.listen(port, () => {

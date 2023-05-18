@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 
 const UserSchema = new Schema({
+    nickname: String,
+    kakaoId: String,
     username: String,
     hashedPassword: String,
     targetToken: String,
@@ -23,17 +25,13 @@ UserSchema.methods.serialize = function(){
 };
 
 UserSchema.methods.generateToken = function(){
-    const token = jwt.sign(
+    return jwt.sign(
         {
             _id: this.id,
             username: this.username,
         },
         process.env.JWT_SECRET,
-        {
-            expiresIn: '7d',
-        }
-    )
-    return token;
+    );
 };
 
 UserSchema.statics.findByUsername = function(username){
