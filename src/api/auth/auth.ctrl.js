@@ -94,6 +94,16 @@ export const login = async ctx => {
             ctx.status = 401;
             return;
         }
+        const accessToken = user.generateToken();
+        const refreshToken = user.generateToken();
+        ctx.cookies.set('access_token', accessToken, {
+            maxAge: 1000 * 60 * 60,
+            httpOnly: true,
+        });
+        ctx.cookies.set('refresh_token', refreshToken, {
+            maxAge: 1000 * 60 * 60 * 24 * 30,
+            httpOnly: true,
+        });
         ctx.body = user.serialize();
     } catch (e) {
         ctx.throw(500, e);
