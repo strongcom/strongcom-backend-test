@@ -1,5 +1,6 @@
 import Router from "koa-router";
 import * as authCtrl from "./auth.ctrl.js";
+import 'dotenv/config';
 
 
 const auth = new Router();
