@@ -1,43 +1,13 @@
 import User from "../../models/schema/user.js";
 import authController from "../../controller/authController.js";
 import passport from "koa-passport";
-import {Strategy as KakaoStrategy} from "passport-kakao";
 import 'dotenv/config';
 
 const {registerValidationCheck, usernameDuplicate} = authController();
-
-passport.use(
-    new KakaoStrategy(
-        {
-            clientID: process.env.KAKAO_ID,
-            callbackURL: process.env.REDIRECT_URI,
-        },
-        async (accessToken, refreshToken, profile, done) => {
-            try {
-                const user = await User.findOne({kakaoId: profile.id});
-                if(user){
-                    done(null, user);
-                }else{
-                    const newUser = new User({
-                        kakaoId: profile.id,
-                        nickname: profile.displayName,
-                    })
-                    await newUser.save();
-                    done(null, newUser);
-                }
-            }catch (e) {
-                done(e);
-            }
-        }
-    )
-);
-
-passport.serializeUser((user, done) => {
-    done(null, user);
-});
-passport.deserializeUser((user, done) => {
-    done(null, user);
-});
+const kakaoInfo={
+    clientID: process.env.KAKAO_ID,
+    callbackURL: process.env.REDIRECT_URI,
+}
 
 export const register = async ctx => {
     console.log(ctx);
@@ -110,7 +80,9 @@ export const login = async ctx => {
     }
 };
 
-export const kakao = passport.authenticate('kakao');
+export const kakao = async ctx => {
+
+}
 
 export const callback = async ctx => {
     try{

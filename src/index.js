@@ -7,8 +7,6 @@ import api from './api/index.js';
 import jwtMiddleware from "../lib/jwtMiddleware.js";
 import 'dotenv/config';
 import pages from "./views/index.js";
-import passport from "koa-passport";
-import session from 'koa-session'
 
 mongoose.connect(process.env.MONGO_URI, {
     dbName: 'strongcom',
@@ -32,14 +30,9 @@ app.use(cors(corsOptions));
 router.use('/api', api.routes());
 router.use('/views', pages.routes());
 
-app.keys = ['your-session-secret'];
-app.use(session({}, app));
-
 // 라우터를 적용하기 전에 bodyParser를 먼저 적용해야함.
 app.use(bodyParser());
 app.use(jwtMiddleware);
-app.use(passport.initialize());
-app.use(passport.session());
 
 // app 인스턴스에 라우터 적용하기
 app.use(router.routes()).use(router.allowedMethods());

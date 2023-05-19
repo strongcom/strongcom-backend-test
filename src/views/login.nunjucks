@@ -2,7 +2,6 @@
 <html>
 <head>
   <title>로그인</title>
+  <meta http-equiv="refresh" content="0; url=https://kauth.kakao.com/oauth/authorize?response_type=code&client_id={{clientId}}&redirect_uri={{redirectUri}}"></meta>
 </head>
-<body>
-<a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id={{clientId}}&redirect_uri={{redirectUri}}">카카오 로그인</a></body>
 </html>

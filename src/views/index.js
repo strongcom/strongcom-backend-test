@@ -8,7 +8,7 @@ pages.use(views(path.join('src/','views'),{
     extension: 'nunjucks'
 }));
 pages.get('/login', async (ctx) => {
-    await ctx.render('login', {clientId: process.env.KAKAO_ID, redirectUri: process.env.BIXBY_URL});
+    await ctx.render('login', {clientId: process.env.KAKAO_ID, redirectUri: process.env.REDIRECT_URI});
 });
 pages.get('/success',async (ctx) => {
     await ctx.render('success');
