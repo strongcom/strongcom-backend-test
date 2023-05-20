@@ -1,45 +1,41 @@
 import User from "../../models/schema/user.js";
 import authController from "../../controller/authController.js";
-import passport from "koa-passport";
 import 'dotenv/config';
 
-const {registerValidationCheck, usernameDuplicate} = authController();
-const kakaoInfo={
-    clientID: process.env.KAKAO_ID,
-    callbackURL: process.env.REDIRECT_URI,
-}
+const {registerValidationCheck, usernameDuplicate, getUserInfoFromKakao} = authController();
 
-export const register = async ctx => {
-    console.log(ctx);
-    const {username, password, targetToken} = ctx.request.body;
+export const kakao = async ctx => {
+    const {targetToken, accessTokenExpiresAt, refreshTokenExpiresAt, accessToken,idToken,refreshToken} = ctx.request.body;
     const result = registerValidationCheck(ctx.request.body);
     if (result.error) {
         ctx.status = 400;
         ctx.body = result.error;
         return;
     }
-
     try {
-        const exists = await usernameDuplicate(username);
+        const userInfo = await getUserInfoFromKakao(accessToken);
+        console.log(userInfo);
+        const exists = await User.findByKakaoId(userInfo.kakaoId);
         if (exists) {
-            ctx.status = 409;
-            return;
+            await User.findOneAndUpdate(
+                {kakaoId: userInfo.kakaoId},
+                {$set: {targetToken, accessToken, accessTokenExpiresAt, refreshTokenExpiresAt, refreshToken,idToken}}
+            ).exec();
+            ctx.status = 204;
+        }else{
+            const user = new User({
+                kakaoId: userInfo.kakaoId,
+                nickname: userInfo.properties.nickname,
+                targetToken,
+                refreshToken,
+                accessTokenExpiresAt,
+                refreshTokenExpiresAt,
+                idToken
+            })
+            await user.save();
+            ctx.status = 200;
+            ctx.body = 'username을 입력해주세요.';
         }
-
-        const user = new User({username, targetToken});
-        await user.setPassword(password);
-        await user.save();
-        ctx.body = user.serialize();
-        const accessToken = user.generateToken();
-        const refreshToken = user.generateToken();
-        ctx.cookies.set('access_token', accessToken, {
-            maxAge: 1000 * 60 * 60,
-            httpOnly: true,
-        });
-        ctx.cookies.set('refresh_token', refreshToken, {
-            maxAge: 1000 * 60 * 60 * 24 * 30,
-            httpOnly: true,
-        });
     } catch (e) {
         ctx.throw(500, e);
     }
@@ -79,31 +75,19 @@ export const login = async ctx => {
         ctx.throw(500, e);
     }
 };
-
-export const kakao = async ctx => {
-
-}
-
-export const callback = async ctx => {
+export const postUsername = async ctx =>{
     try{
-        passport.authenticate('kakao', {
-            successRedirect: '/profile',
-            failureRedirect: '/kakao',
-        })
-    }catch (e){
+        const exists = await usernameDuplicate(username);
+        if (exists) {
+            ctx.status = 409;
+            ctx.body = `username 중복`
+            return;
+        }
+
+    }catch (e) {
         ctx.throw(500, e);
     }
 }
-
-export const profile = async ctx => {
-    if (ctx.isAuthenticated()) {
-        const { displayName, id } = ctx.state.user;
-        ctx.body = `Welcome, ${displayName} (ID: ${id})`;
-    } else {
-        ctx.redirect('/login');
-    }
-}
-
 export const check = async ctx => {
     const {user} = ctx.state;
     if (!user) {
