@@ -4,7 +4,7 @@ import Router from 'koa-router';
 import bodyParser from 'koa-bodyparser';
 import mongoose from 'mongoose';
 import api from './api/index.js';
-import jwtMiddleware from "../lib/jwtMiddleware.js";
+import kakaoMiddleware from "../lib/kakaoMiddleware.js";
 import 'dotenv/config';
 import pages from "./views/index.js";
 
@@ -32,7 +32,7 @@ router.use('/views', pages.routes());
 
 // 라우터를 적용하기 전에 bodyParser를 먼저 적용해야함.
 app.use(bodyParser());
-app.use(jwtMiddleware);
+app.use(kakaoMiddleware);
 
 // app 인스턴스에 라우터 적용하기
 app.use(router.routes()).use(router.allowedMethods());
