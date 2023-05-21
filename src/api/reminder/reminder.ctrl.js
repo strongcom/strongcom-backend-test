@@ -16,10 +16,9 @@ const {
 } = reminderController();
 
 export const getReminderList = async ctx => {
-    console.log(ctx.request)
     try {
         ctx.body = (await Reminder
-            .find().exec())
+            .find({'userInfo.kakaoId': ctx.state.user.kakaoId}).exec())
             .map(reminder => ({id: reminder.id,title: reminder.title, subTitle: reminder.subTitle}))
     } catch (e) {
         ctx.throw(500, e);
@@ -29,7 +28,7 @@ export const getReminderList = async ctx => {
 export const getTodayReminderList = async ctx => {
     try{
         ctx.body = (await Reminder
-            .find().exec())
+            .find({'userInfo.kakaoId': ctx.state.user.kakaoId}).exec())
             .filter(reminder => {
                 for (let date of reminder.notices) {
                     if (dayjs(`${date}T${reminder.startTime}`).isSameOrBefore(dayjs())
@@ -99,11 +98,9 @@ export const postReminder = async ctx => {
         ctx.body = validationCheck.error
         return;
     }
-
+    console.log('ctx.state.user',ctx.state.user)
     const reminderEntity = reminderDtoToEntity(ctx.request.body, ctx.state.user);
     const reminder = new Reminder(reminderEntity);
-
-    console.log(reminder);
 
     try {
         console.log('reminder post result\n', reminder)

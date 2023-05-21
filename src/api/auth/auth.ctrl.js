@@ -7,6 +7,7 @@ const {registerValidationCheck, usernameDuplicate, getUserInfoFromKakao} = authC
 export const kakao = async ctx => {
     const {targetToken, accessTokenExpiresAt, refreshTokenExpiresAt, accessToken,idToken,refreshToken} = ctx.request.body;
     const result = registerValidationCheck(ctx.request.body);
+    console.log(accessToken)
     if (result.error) {
         ctx.status = 400;
         ctx.body = result.error;

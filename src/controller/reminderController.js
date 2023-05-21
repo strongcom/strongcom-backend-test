@@ -74,9 +74,10 @@ export default function reminderController(){
     }
 
     const reminderDtoToEntity = (reminderPostDto, user) =>{
-        console.log(user);
+        console.log('reminderDtoToEntity',user);
         return {
             ...reminderPostDto,
+            userInfo:user,
             notices: noticesGenerator(
                 {
                     startDate:reminderPostDto.startDate,
@@ -85,7 +86,6 @@ export default function reminderController(){
                     repetitionDay:reminderPostDto.repetitionDay,
                 }
             ),
-            userInfo:user,
         }
     }
 

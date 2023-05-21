@@ -6,11 +6,11 @@ import {getReminderById, getReminderTitleList, getTodayReminderList, postReminde
 const reminders= new Router();
 
 // reminders.get('/',checkLoggedIn, reminderCtrl.getReminderList);
-reminders.get('/', reminderCtrl.getReminderList);
-reminders.get('/today', reminderCtrl.getTodayReminderList);
-reminders.get('/title', reminderCtrl.getReminderTitleList);
+reminders.get('/',checkLoggedIn, reminderCtrl.getReminderList);
+reminders.get('/today', checkLoggedIn,reminderCtrl.getTodayReminderList);
 reminders.post('/', checkLoggedIn,reminderCtrl.postReminder);
-// reminders.post('/title', checkLoggedIn,reminderCtrl.postReminderByTitle);
+// TODO 빅스비 전용 api 로그인 요청하도록 변경하기
+reminders.get('/title', reminderCtrl.getReminderTitleList);
 reminders.post('/title',reminderCtrl.postReminderByTitle);
 
 const reminder = new Router();
