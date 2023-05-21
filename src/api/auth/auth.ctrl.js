@@ -14,10 +14,10 @@ export const kakao = async ctx => {
     }
     try {
         const userInfo = await getUserInfoFromKakao(accessToken);
-        const exists = await User.findByKakaoId(userInfo.kakaoId);
+        const exists = await User.findByKakaoId(userInfo.id);
         if (exists) {
             await User.findOneAndUpdate(
-                {kakaoId: userInfo.kakaoId},
+                {kakaoId: userInfo.id},
                 {$set: {targetToken, accessToken, accessTokenExpiresAt, refreshTokenExpiresAt, refreshToken,idToken}}
             ).exec();
             ctx.status = 204;
@@ -30,7 +30,7 @@ export const kakao = async ctx => {
                 accessTokenExpiresAt,
                 refreshTokenExpiresAt,
                 idToken
-            })
+            });
             await user.save();
             ctx.status = 200;
             ctx.body = user.serialize();
@@ -54,6 +54,22 @@ export const postUsername = async ctx =>{
         ).exec();
         console.log(ctx.state.user.kakaoId)
         ctx.status = 204;
+    }catch (e) {
+        ctx.throw(500, e);
+    }
+}
+
+export const getUserInfo = async ctx =>{
+    try{
+        const user = await User.findOne(
+            {kakaoId: ctx.state.user.kakaoId},
+        );
+        console.log(user)
+        ctx.status = 200;
+        ctx.body = {
+            username: user.username,
+            nickname: user.nickname,
+        }
     }catch (e) {
         ctx.throw(500, e);
     }

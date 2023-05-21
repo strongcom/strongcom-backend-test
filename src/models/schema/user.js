@@ -47,8 +47,8 @@ UserSchema.statics.findByUsername = function(username){
     return this.findOne({username});
 };
 
-UserSchema.statics.findByKakaoId = function(kakaoId){
-    return this.findOne({kakaoId});
+UserSchema.statics.findByKakaoId = function(id){
+    return this.findOne({kakaoId: id});
 }
 
 const User = mongoose.model('User', UserSchema);
