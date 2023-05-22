@@ -4,6 +4,7 @@ const {testPush,pushNotifications} = notificationController();
 export const test = async ctx => {
     try{
         ctx = {...await testPush(ctx)};
+        ctx.status = 204;
     }catch (e){
         ctx.throw(500, e);
     }
