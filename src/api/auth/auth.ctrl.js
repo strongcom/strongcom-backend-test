@@ -5,9 +5,9 @@ import 'dotenv/config';
 const {registerValidationCheck, usernameDuplicate, getUserInfoFromKakao} = authController();
 
 export const kakao = async ctx => {
+    console.log(ctx.request.body);
     const {targetToken, accessTokenExpiresAt, refreshTokenExpiresAt, accessToken,idToken,refreshToken} = ctx.request.body;
     const result = registerValidationCheck(ctx.request.body);
-    console.log(accessToken)
     if (result.error) {
         ctx.status = 400;
         ctx.body = result.error;

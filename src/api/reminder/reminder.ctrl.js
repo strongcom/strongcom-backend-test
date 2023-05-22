@@ -112,6 +112,7 @@ export const postReminder = async ctx => {
 };
 
 export const postReminderByTitle = async ctx => {
+    console.log(ctx.headers);
     const titleValidation = titleValidationCheck(ctx.request.body);
 
     if (titleValidation.error){
