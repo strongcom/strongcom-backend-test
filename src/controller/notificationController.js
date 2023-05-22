@@ -24,7 +24,6 @@ export default function notificationController() {
     const testPush = async (ctx) => {
         let deviceToken = 'dLlWSA3FRnyXpjuqom5Dzk:APA91bFex4CKzMT2FXrqImcopzGx8dqpkbfmaNTXjoTvFW6cwhKNseXk3BY2eQsPm4kE5wMWQV3bafD1LOFJvkV6-RWkBpm1qJbYqPkoX9SqcCxhPe8sNWPz4PvJC57NfngezREcYqFf';
         let message = {
-            priority: 'high',
             notification: {
                 title: '텀블러 챙기기',
                 sound: 'default'
