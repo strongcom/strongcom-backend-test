@@ -27,7 +27,6 @@ export default function notificationController() {
             notification: {
                 title: '텀블러 챙기기',
             },
-            sound: 'default',
             token: deviceToken,
         }
         console.log(message)
