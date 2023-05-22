@@ -27,7 +27,20 @@ export default function notificationController() {
             notification: {
                 title: '텀블러 챙기기',
             },
-            token: deviceToken
+            token: deviceToken,
+            android: {
+                priority: 'high',
+                notification: {
+                    sound: 'default'
+                }
+            },
+            apns: {
+                payload: {
+                    aps: {
+                        sound: 'default',
+                    }
+                }
+            }
         }
         await pushNotice(message);
         return ctx;
