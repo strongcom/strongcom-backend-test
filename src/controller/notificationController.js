@@ -22,7 +22,7 @@ export default function notificationController() {
             });
     }
     const testPush = async (ctx) => {
-        let deviceToken = 'dLlWSA3FRnyXpjuqom5Dzk:APA91bFex4CKzMT2FXrqImcopzGx8dqpkbfmaNTXjoTvFW6cwhKNseXk3BY2eQsPm4kE5wMWQV3bafD1LOFJvkV6-RWkBpm1qJbYqPkoX9SqcCxhPe8sNWPz4PvJC57NfngezREcYqFf';
+        let deviceToken = ctx.query.targetToken || 'c6ODw0pEQ_2zOIRiSOZJM-:APA91bEpGXewVzZKbtlsjBs7tNfI59L_kEvxESxApuc8nVditTo082lw3ANrwIy7LPwrd43x-NCBX5eSncpudNTBi3YeiPg7ReGfV6Oq7b2Dk8kFODDcqNiRR3ziUJjRLDKtFCbdZ4nw';
         let message = {
             notification: {
                 title: '텀블러 챙기기',
