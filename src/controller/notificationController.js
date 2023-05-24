@@ -11,6 +11,7 @@ export default function notificationController() {
         });
     }
     const pushNotice = async ({message}) => {
+        console.log(message)
         await admin
             .messaging()
             .send(message)
@@ -35,7 +36,7 @@ export default function notificationController() {
             token: deviceToken,
         }
         console.log(message)
-        await pushNotice({message: JSON.stringify(message)});
+        await pushNotice({message: message});
         return ctx;
     }
 
@@ -77,7 +78,7 @@ export default function notificationController() {
     }
 
     const pushNotifications = async (ctx) => {
-        const user = await User.findOne({username: ctx.request.body.username});
+        const user = await User.findOne({userName: ctx.request.body.userName});
         const todayReminders = await findTodayReminders({user: user});
 
         for (const reminder of todayReminders) {

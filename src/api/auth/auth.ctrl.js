@@ -2,7 +2,7 @@ import User from "../../models/schema/user.js";
 import authController from "../../controller/authController.js";
 import 'dotenv/config';
 
-const {registerValidationCheck, usernameDuplicate, getUserInfoFromKakao} = authController();
+const {registerValidationCheck, userNameDuplicate, getUserInfoFromKakao} = authController();
 
 export const kakao = async ctx => {
     console.log(ctx.request.body);
@@ -41,17 +41,17 @@ export const kakao = async ctx => {
     }
 };
 
-export const postUsername = async ctx =>{
-    const {username} = ctx.request.body;
+export const postuserName = async ctx =>{
+    const {userName} = ctx.request.body;
     try{
-        const exists = await usernameDuplicate(username);
+        const exists = await userNameDuplicate(userName);
         if (exists) {
             ctx.status = 409;
             return;
         }
         await User.findOneAndUpdate(
             {kakaoId: ctx.state.user.kakaoId},
-            {$set: {username: username}}
+            {$set: {userName: userName}}
         ).exec();
         console.log(ctx.state.user.kakaoId)
         ctx.status = 204;
@@ -68,7 +68,7 @@ export const getUserInfo = async ctx =>{
         console.log(user)
         ctx.status = 200;
         ctx.body = {
-            username: user.username,
+            userName: user.userName,
             nickname: user.nickname,
         }
     }catch (e) {

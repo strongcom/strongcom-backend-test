@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 const UserSchema = new Schema({
     nickname: String,
     kakaoId: String,
-    username: String,
+    userName: String,
     // hashedPassword: String,
     targetToken: String,
     refreshToken: String,
@@ -34,7 +34,7 @@ UserSchema.methods.serialize = function(){
 //     return jwt.sign(
 //         {
 //             _id: this.id,
-//             username: this.username,
+//             userName: this.userName,
 //         },
 //         process.env.JWT_SECRET,
 //         {
@@ -43,8 +43,8 @@ UserSchema.methods.serialize = function(){
 //     );
 // };
 
-UserSchema.statics.findByUsername = function(username){
-    return this.findOne({username});
+UserSchema.statics.findByuserName = function(userName){
+    return this.findOne({userName});
 };
 
 UserSchema.statics.findByKakaoId = function(id){

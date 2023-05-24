@@ -11,13 +11,13 @@ export const test = async ctx => {
 }
 
 export const detectedUser = async ctx => {
-    const {username, time} = ctx.request.body;
+    const {userName, time} = ctx.request.body;
 
     try{
         await pushNotifications(ctx);
         ctx.status = 204;
         ctx.body = {
-            username: username,
+            userName: userName,
             time: time,
         };
     }catch (e) {

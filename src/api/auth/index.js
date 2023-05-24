@@ -8,7 +8,7 @@ const auth = new Router();
 
 
 auth.post('/kakao', authCtrl.kakao);
-auth.post('/username', checkLoggedIn, authCtrl.postUsername);
+auth.post('/userName', checkLoggedIn, authCtrl.postuserName);
 auth.get('/userinfo', checkLoggedIn, authCtrl.getUserInfo);
 // auth.post('/login', authCtrl.login);
 auth.post('/check', authCtrl.check);

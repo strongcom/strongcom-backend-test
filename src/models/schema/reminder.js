@@ -5,7 +5,7 @@ const {Schema} = mongoose;
 const ReminderSchema = new Schema({
     userInfo: {
         kakaoId: String,
-        username: String,
+        userName: String,
     },
     title: String,
     subTitle: String,

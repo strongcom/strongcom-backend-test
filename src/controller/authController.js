@@ -6,7 +6,7 @@ import * as https from "https";
 export default function authController(){
     const registerValidationCheck= (body) => {
         const schema = Joi.object().keys({
-            // username: Joi.string().alphanum().min(3).max(20).required(),
+            // userName: Joi.string().alphanum().min(3).max(20).required(),
             targetToken: Joi.string().required(),
             accessTokenExpiresAt: Joi.string().required().isoDate(),
             refreshTokenExpiresAt: Joi.string().required().isoDate(),
@@ -18,8 +18,8 @@ export default function authController(){
         return schema.validate(body);
     }
 
-    const usernameDuplicate = async (username) => {
-        const exists = await User.findByUsername(username);
+    const userNameDuplicate = async (userName) => {
+        const exists = await User.findByuserName(userName);
         return !!exists;
     }
 
@@ -36,7 +36,7 @@ export default function authController(){
 
     return{
         registerValidationCheck,
-        usernameDuplicate,
+        userNameDuplicate,
         getUserInfoFromKakao
     }
 }
