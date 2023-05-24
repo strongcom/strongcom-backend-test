@@ -30,9 +30,6 @@ export default function notificationController() {
                 android_channel_id: 'high-priority',
             },
             token: deviceToken,
-            android: {
-                channel_id: 'high-priority',
-            },
             priority: 'high',
         }
         console.log(message)
