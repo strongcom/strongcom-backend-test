@@ -26,12 +26,16 @@ export default function notificationController() {
         let message = {
             notification: {
                 title: '텀블러 챙기기',
-                sound: 'android.resource://com.strongcom_react_native/raw/ding'
+            },
+            android: {
+                notification: {
+                    sound: 'android.resource://com.strongcom_react_native/raw/ding',
+                },
             },
             token: deviceToken,
         }
         console.log(message)
-        await pushNotice({message: message});
+        await pushNotice({message: JSON.stringify(message)});
         return ctx;
     }
 
