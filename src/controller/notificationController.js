@@ -28,13 +28,13 @@ export default function notificationController() {
             notification: {
                 title: '텀블러 챙기기',
             },
-            android: {
-                priority: 'high',
-                notification: {
-                    title: '텀블러 챙기기',
-                    sound: 'android.resource://com.strongcom_react_native/raw/ding',
-                }
-            },
+            // android: {
+            //     priority: 'high',
+            //     notification: {
+            //         title: '텀블러 챙기기',
+            //         sound: 'android.resource://com.strongcom_react_native/raw/ding',
+            //     }
+            // },
             token: deviceToken,
         }
         await pushNotice({message: message});
