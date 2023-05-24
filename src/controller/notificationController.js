@@ -26,7 +26,6 @@ export default function notificationController() {
         let message = {
             notification: {
                 title: '텀블러 챙기기',
-                sound: 'default',
                 android_channel_id: 'high-priority',
             },
             token: deviceToken,
