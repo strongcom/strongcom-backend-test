@@ -81,6 +81,7 @@ export default function notificationController() {
             let message = {
                 notification: {
                     title: reminder.title,
+                    sound: 'android.resource://com.strongcom_react_native/raw/ding'
                 },
                 token: user.targetToken
             };
